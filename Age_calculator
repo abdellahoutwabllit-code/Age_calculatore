@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>حساب العمر بالهجري والميلادي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: 'Tahoma', sans-serif; background: #f0f4f8; text-align: center; padding: 20px; }
+    .container { background: white; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0 4px 10px #ccc; }
+    h1 { color: #2c3e50; }
+    input, button { padding: 12px; margin: 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; width: 80%; }
+    button { background: #27ae60; color: white; border: none; cursor: pointer; }
+    .result { background: #ecf0f1; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: right; }
+    .result p { margin: 8px 0; font-size: 18px; }
+    span { color: #e74c3c; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>احسب عمرك بدقة</h1>
+    <p>دخل تاريخ الازدياد ديالك</p>
+    <input type="date" id="birthdate">
+    <button onclick="calculateAge()">احسب العمر</button>
+    <div id="result" class="result" style="display:none;">
+      <p>عمرك هو: <span id="years"></span> سنة، <span id="months"></span> شهر، <span id="days"></span> يوم</p>
+      <p>عشت تقريبا: <span id="hours"></span> ساعة</p>
+      <p>تزاديتي نهار: <span id="dayName"></span></p>
+      <p>باقي لعيد ميلادك: <span id="nextBirthday"></span> يوم</p>
+    </div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      const birthInput = document.getElementById('birthdate').value;
+      if (!birthInput) { alert('دخل تاريخ الازدياد عافاك'); return; }
+      
+      const birthDate = new Date(birthInput);
+      const today = new Date();
+      
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+      let days = today.getDate() - birthDate.getDate();
+      
+      if (days < 0) { months--; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+      if (months < 0) { years--; months += 12; }
+      
+      const diffTime = Math.abs(today - birthDate);
+      const hours = Math.floor(diffTime / (1000 * 60 * 60));
+      
+      const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      const dayName = dayNames[birthDate.getDay()];
+      
+      let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+      if (today > nextBirthday) nextBirthday.setFullYear(today.getFullYear() + 1);
+      const daysToBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+      
+      document.getElementById('years').innerText = years;
+      document.getElementById('months').innerText = months;
+      document.getElementById('days').innerText = days;
+      document.getElementById('hours').innerText = hours.toLocaleString();
+      document.getElementById('dayName').innerText = dayName;
+      document.getElementById('nextBirthday').innerText = daysToBirthday;
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
